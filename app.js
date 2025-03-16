@@ -63,15 +63,19 @@ async function fetchQuote() {
 
 // Home Route
 app.get("/", async (req, res) => {
-    // if (req.session.username.lower() === "guest") {
-    //     res.redirect("/login")
-    // }
-    try {
-        const [rows] = await db.execute("SELECT * FROM posts ORDER BY created_at DESC");
-        res.render("home", { username: "Guest", startText, posts: rows });
-    } catch (err) {
-        console.error("Database Error:", err);
-        res.status(500).send("Error fetching posts");
+    if (!req.session.username) {
+        res.redirect("/login")
+        console.log("Please redirect to sign up page.")
+    }
+    else {
+
+        try {
+            res.redirect(`/${req.session.username}/home`);
+
+        } catch (err) {
+            console.error("Database Error:", err);
+            res.status(500).send("Error fetching posts");
+        }
     }
 });
 
