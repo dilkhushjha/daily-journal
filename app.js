@@ -55,11 +55,7 @@ async function fetchQuote() {
     console.log("Stored Quote in startText:", startText);
 })();
 
-// =========================
-// Static Content
-// =========================
-const contactText = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, soluta?";
-const aboutText = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, soluta?";
+
 
 // =========================
 // Routes
@@ -67,6 +63,9 @@ const aboutText = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit,
 
 // Home Route
 app.get("/", async (req, res) => {
+    if (req.session.username.lower() === "guest") {
+        res.redirect("/login")
+    }
     try {
         const [rows] = await db.execute("SELECT * FROM posts ORDER BY created_at DESC");
         res.render("home", { username: "Guest", startText, posts: rows });
