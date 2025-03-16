@@ -63,9 +63,9 @@ async function fetchQuote() {
 
 // Home Route
 app.get("/", async (req, res) => {
-    if (req.session.username.lower() === "guest") {
-        res.redirect("/login")
-    }
+    // if (req.session.username.lower() === "guest") {
+    //     res.redirect("/login")
+    // }
     try {
         const [rows] = await db.execute("SELECT * FROM posts ORDER BY created_at DESC");
         res.render("home", { username: "Guest", startText, posts: rows });
