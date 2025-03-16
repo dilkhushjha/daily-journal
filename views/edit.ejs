@@ -1,0 +1,46 @@
+<%- include("partials/header", { username: "Khush" }) -%>
+
+    <div class="edit-container">
+        <h1>Edit Post</h1>
+        <form id="editForm">
+            <div class="form-group">
+                <label for="postTitle">Title</label>
+                <input type="text" class="form-control" id="editTitle" value="<%= post.title %>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="postContent">Content</label>
+                <textarea class="form-control" id="editContent" rows="5"><%= post.content %></textarea>
+            </div>
+            <div class="form-group mt-4">
+                <button class="btn btn-primary " type="submit">Update</button>
+                <a class="btn btn-warning " href="/">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("editForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const title = document.getElementById("editTitle").value;
+            const content = document.getElementById("editContent").value;
+
+            console.log(content, title);
+
+            const response = await fetch(`/edit/${title}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ content })
+            })
+
+            if (response.ok) {
+                // alert("Post updated successfully!");
+                window.location.href = "/";
+            } else {
+                console.log(response)
+                alert("Failed to update the post.");
+            }
+        });
+    </script>
+
+    <%- include("partials/footer") -%>

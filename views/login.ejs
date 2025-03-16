@@ -1,0 +1,24 @@
+<%- include("partials/headerwithoutnavbar") -%>
+    <div class="shadow border p-5 login-form z-1">
+
+        <h1>Login</h1>
+        <form action="/login" method="post" class="d-flex flex-column gap-2 pt-4">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <input type="text" name="username" class="form-control" id="username" autocomplete="on">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input name="password" class="form-control" id="password"></input>
+            </div>
+            <div class="form-group">
+                <button type="submit" name="button" class="btn btn-primary mt-3">Login</button>
+            </div>
+        </form>
+        <% if (loginError){ %>
+            <p class="text-danger pt-3 text-right">Invalid credentials</p>
+            <% loginError=false } %>
+
+    </div>
+
+    <%- include("partials/footerlogin") -%>
