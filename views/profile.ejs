@@ -1,0 +1,248 @@
+<%- include("partials/header") -%>
+
+    <div class="container-fluid py-4">
+        <div class="row justify-content-center">
+            <div class="col-xl-12">
+                <!-- Breadcrumb navigation -->
+                <nav aria-label="breadcrumb" class="d-flex mb-4">
+                    <ol class="breadcrumb bg-transparent m-0">
+                        <li class="breadcrumb-item">
+                            <a href="/" class="text-decoration-none">
+                                <i class="bi bi-house me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Profile
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- Profile header -->
+                <div class="row mb-5">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <div class="card border-0 shadow-sm text-center">
+                            <div class="card-body p-4">
+                                <div class="avatar-placeholder mb-3 mx-auto">
+                                    <i class="bi bi-person-fill" style="font-size: 3rem;"></i>
+                                </div>
+                                <h2 class="h3 mb-1">My Journal</h2>
+                                <p class="text-muted mb-3">Member since <%= new Date().toLocaleDateString('en-US', {
+                                        month: 'long' , year: 'numeric' }) %>
+                                </p>
+                                <button class="btn btn-outline-primary rounded-pill w-100 mb-2">
+                                    <i class="bi bi-pencil me-2"></i>Edit Profile
+                                </button>
+                                <button class="btn btn-outline-secondary rounded-pill w-100">
+                                    <i class="bi bi-gear me-2"></i>Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <h3 class="h4 mb-4">Journal Stats</h3>
+
+                                <div class="row g-4">
+                                    <div class="col-sm-4">
+                                        <div class="stat-card p-3 bg-light rounded text-center">
+                                            <div class="stat-icon mb-2">
+                                                <i class="bi bi-journal-text"
+                                                    style="font-size: 2rem; color: #0d6efd;"></i>
+                                            </div>
+                                            <h4 class="h2 mb-0">42</h4>
+                                            <p class="text-muted mb-0">Total Entries</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="stat-card p-3 bg-light rounded text-center">
+                                            <div class="stat-icon mb-2">
+                                                <i class="bi bi-calendar-check"
+                                                    style="font-size: 2rem; color: #198754;"></i>
+                                            </div>
+                                            <h4 class="h2 mb-0">7</h4>
+                                            <p class="text-muted mb-0">This Month</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="stat-card p-3 bg-light rounded text-center">
+                                            <div class="stat-icon mb-2">
+                                                <i class="bi bi-graph-up" style="font-size: 2rem; color: #dc3545;"></i>
+                                            </div>
+                                            <h4 class="h2 mb-0">125k</h4>
+                                            <p class="text-muted mb-0">Words Written</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <h3 class="h4 mb-3">Recent Activity</h3>
+                                <div class="activity-timeline">
+                                    <div class="activity-item d-flex mb-3">
+                                        <div class="activity-icon me-3">
+                                            <i class="bi bi-pencil-fill bg-primary text-white p-2 rounded-circle"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <p class="mb-1 fw-medium">Created a new entry: "Morning Reflections"</p>
+                                            <p class="text-muted small mb-0">Today, 9:15 AM</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="activity-item d-flex mb-3">
+                                        <div class="activity-icon me-3">
+                                            <i class="bi bi-pencil-square bg-success text-white p-2 rounded-circle"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <p class="mb-1 fw-medium">Updated entry: "Weekly Goals"</p>
+                                            <p class="text-muted small mb-0">Yesterday, 3:45 PM</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="activity-item d-flex">
+                                        <div class="activity-icon me-3">
+                                            <i class="bi bi-trash bg-danger text-white p-2 rounded-circle"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <p class="mb-1 fw-medium">Deleted entry: "Draft Ideas"</p>
+                                            <p class="text-muted small mb-0">March 15, 2025, 7:30 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Journal preferences -->
+                <div class="card border-0 shadow-sm mb-5">
+                    <div class="card-body p-4 p-lg-5">
+                        <h3 class="h4 mb-4">Journal Preferences</h3>
+
+                        <form>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="darkMode" checked>
+                                        <label class="form-check-label" for="darkMode">Dark Mode</label>
+                                    </div>
+
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                        <label class="form-check-label" for="emailNotifications">Email Reminders</label>
+                                    </div>
+
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="autoSave" checked>
+                                        <label class="form-check-label" for="autoSave">Auto-save Drafts</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="reminderFrequency" class="form-label">Reminder Frequency</label>
+                                        <select class="form-select" id="reminderFrequency">
+                                            <option>Daily</option>
+                                            <option selected>Weekly</option>
+                                            <option>Monthly</option>
+                                            <option>Never</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="defaultView" class="form-label">Default View</label>
+                                        <select class="form-select" id="defaultView">
+                                            <option selected>Recent Entries</option>
+                                            <option>Calendar View</option>
+                                            <option>Categories</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                    <i class="bi bi-save me-2"></i>Save Preferences
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Data management -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h4 mb-4">Data Management</h3>
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body p-3">
+                                        <h5 class="card-title">Export Journal</h5>
+                                        <p class="card-text text-muted small">Download all your journal entries as a
+                                            single file.</p>
+                                        <div class="btn-group w-100">
+                                            <button class="btn btn-outline-primary">PDF</button>
+                                            <button class="btn btn-outline-primary">Word</button>
+                                            <button class="btn btn-outline-primary">Text</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body p-3">
+                                        <h5 class="card-title">Account Actions</h5>
+                                        <p class="card-text text-muted small">Manage your journal account and data.</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-warning">Reset Journal</button>
+                                            <button class="btn btn-outline-danger">Delete Account</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Avatar placeholder styling */
+        .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+
+        /* Activity timeline styling */
+        .activity-icon i {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        /* Stat card hover effect */
+        .stat-card {
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+
+    <%- include("partials/footer") -%>

@@ -1,3 +1,9 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+}
+
 a:hover {
   cursor: pointer;
   transition: 0.5s ease;
@@ -20,8 +26,7 @@ a:hover {
   border: 0;
   border-radius: 0;
   margin-bottom: 0;
-  font-size: 12px;
-  letter-spacing: 5px;
+  font-size: 16px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -70,28 +75,85 @@ a:hover {
 
 .bg-journal {
   /*  */
-  background-image: url("./Ivory\ Pastel\ Minimalist\ Floral\ Desktop\ Wallpaper.png");
-  background-color: #999;
+  /* background-image: url("./Ivory\ Pastel\ Minimalist\ Floral\ Desktop\ Wallpaper.png"); */
+  /* background-color: #999; */
   background-size: cover;
 }
 
-.post-div {
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
 
-}
-
+/* Post card styling */
 .post-card {
-  padding: 1.5rem;
+  transition: all 0.3s ease;
   overflow: hidden;
-  width: auto;
-  background-color: white;
-  border-radius: 0.5rem;
 }
 
-.post-card h1 {
-  font-size: 2rem;
+.post-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Avatar circle styling */
+.avatar-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Read more button hover effect */
+.read-more-btn {
+  transition: all 0.2s ease;
+}
+
+.read-more-btn:hover {
+  transform: translateX(5px);
+}
+
+/* Action button styling */
+.action-btn {
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #f0f0f0;
+}
+
+/* Card header glow effect on hover */
+.post-card:hover .card-header {
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* Card hover shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+.post-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+  background-size: 200% 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.post-card:hover::after {
+  opacity: 1;
+  animation: shimmer 1.5s infinite;
 }
 
 .welcome {
@@ -110,9 +172,12 @@ a:hover {
 /* Login */
 
 
-.login-form {
-  background: #fff;
-  width: 500px;
-  margin: 0 auto;
-  transform: translate(0, 50%);
+.bg-login {
+  background-image: url("https://static.vecteezy.com/system/resources/previews/033/103/886/non_2x/writing-continuous-line-drawing-hand-with-pen-line-art-one-line-graphic-illustration-vector.jpg");
+  background-size: contain;
+  background-position: right;
+}
+
+.main-container {
+  min-height: 90vh;
 }

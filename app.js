@@ -7,6 +7,7 @@ const ejs = require("ejs");
 const _ = require("lodash");
 const db = require("./db");
 const session = require("express-session");
+const bcrypt = require("bcrypt");
 
 // =========================
 // Initialize Express App
@@ -92,9 +93,39 @@ app.get("/login", (req, res) => {
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     try {
-        const [userData] = await db.execute("SELECT * FROM users WHERE username=? AND password=?", [username, password]);
-        if (userData[0]) {
-            req.session.username = userData[0].username;
+        // Fetch the user from the database
+        const [rows] = await db.execute("SELECT password FROM users WHERE username = ?;", [username]);
+
+        if (rows.length === 0) {
+            return res.render("login", { loginError: true }); // User not found
+        }
+
+        const storedHashedPassword = rows[0].password;
+
+        // Compare entered password with stored hashed password
+        const match = await bcrypt.compare(password, storedHashedPassword);
+
+        if (match) {
+            req.session.username = username;
+            return res.redirect(`/${req.session.username}/home`);
+        } else {
+            return res.render("login", { loginError: true }); // Incorrect password
+        }
+    } catch (err) {
+        console.error("Error Logging in:", err);
+        res.status(500).send("Error logging in");
+    }
+});
+
+
+app.post("/signup", async (req, res) => {
+    const { username, password, email } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const rows = await db.execute("INSERT INTO users VALUES (?,?,?);", [username, email, hashedPassword]);
+        console.log(rows);
+        if (rows) {
+            req.session.username = username;
             return res.redirect(`/${req.session.username}/home`);
         }
         res.render("login", { loginError: true });
@@ -103,6 +134,8 @@ app.post("/login", async (req, res) => {
         res.status(500).send("Error logging in");
     }
 });
+
+
 
 // Logout Handler
 app.get("/logout", (req, res) => {
@@ -118,7 +151,12 @@ app.get("/:username/home", async (req, res) => {
     if (!req.session.username) return res.redirect("/login");
     try {
         const [rows] = await db.execute("SELECT * FROM posts WHERE user = ? ORDER BY created_at DESC", [req.session.username]);
-        res.render("home", { username: req.session.username, startText, posts: rows });
+        // Decode content using Base64
+        const decodedPosts = rows.map(post => ({
+            title: post.title,
+            content: Buffer.from(post.content, "base64").toString("utf-8")
+        }));
+        res.render("home", { username: req.session.username, startText, posts: decodedPosts });
     } catch (err) {
         console.error("Error fetching posts:", err);
         res.status(500).send("Error loading home page");
@@ -136,7 +174,11 @@ app.post("/:username/compose", async (req, res) => {
     if (!req.session.username) return res.redirect("/login");
     try {
         const { postTitle, postBody } = req.body;
-        await db.execute("INSERT INTO posts (title, content, user) VALUES (?, ?, ?)", [postTitle, postBody, req.session.username]);
+
+        // Encode content using Base64
+        const encodedContent = Buffer.from(postBody, "utf-8").toString("base64");
+
+        await db.execute("INSERT INTO posts (title, content, user) VALUES (?, ?, ?)", [postTitle, encodedContent, req.session.username]);
         res.redirect(`/${req.session.username}/home`);
     } catch (err) {
         console.error("Database Error:", err);
@@ -159,10 +201,11 @@ app.get("/:username/posts/:postTitle", async (req, res) => {
         const [result] = await db.execute("SELECT * FROM posts WHERE title = ? and user = ?;", [postTitle, username]);
         console.log(result[0])
 
+
         const postData = {
             username: username,
             postTitle: result[0]["title"],
-            postBody: result[0]["content"],
+            postBody: Buffer.from(result[0]["content"], "base64").toString("utf-8"),
             createdDate: result[0]["created_at"]
 
         }
@@ -191,7 +234,15 @@ app.get("/edit/:postTitle", async (req, res) => {
     try {
         const { postTitle } = req.params;
         const [post] = await db.execute("SELECT * FROM posts WHERE title = ?", [postTitle]);
-        post.length > 0 ? res.render("edit", { post: post[0] }) : res.status(404).send("Post not found");
+
+        const decodedContent = {
+            title: post[0].title,
+            content: Buffer.from(post[0].content, "base64").toString("utf-8")
+
+        }
+
+
+        post.length > 0 ? res.render("edit", { post: decodedContent, username: req.session.username }) : res.status(404).send("Post not found");
     } catch (err) {
         console.error(err);
         res.status(500).send("Error retrieving post");
@@ -203,13 +254,40 @@ app.put("/edit/:postTitle", async (req, res) => {
     try {
         const { postTitle } = req.params;
         const { content } = req.body;
-        const [result] = await db.execute("UPDATE posts SET content = ? WHERE title = ?", [content, postTitle]);
-        result.affectedRows > 0 ? res.sendStatus(200) : res.status(404).send("Post not found");
+        const encodedContent = Buffer.from(content, "utf-8").toString("base64");
+        const [result] = await db.execute(
+            "UPDATE posts SET content = ? WHERE title = ?",
+            [encodedContent, postTitle]
+        );
+
+        if (result.affectedRows > 0) {
+            // Send both status and username
+            res.json({
+                success: true,
+                username: req.session.username
+            });
+        } else {
+            res.status(404).json({ error: "Post not found" });
+        }
     } catch (err) {
         console.error("Error updating post:", err);
-        res.status(500).send("Error updating post");
+        res.status(500).json({ error: "Error updating post" });
     }
 });
+
+
+app.get('/:username/profile', async (req, res) => {
+    try {
+        const username = req.params.username;
+        console.log(username);
+        const [result] = await db.execute("SELECT * from users WHERE username = ?", [username]);
+        console.log(result[0])
+        res.render('profile', { username: username })
+    } catch (err) {
+        console.error("Error fetching profile:", err);
+        res.status(500).send("Error fetching profile");
+    }
+})
 
 // =========================
 // Start Server

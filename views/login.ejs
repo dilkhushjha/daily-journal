@@ -1,70 +1,213 @@
 <%- include("partials/headerwithoutnavbar") -%>
-    <div class="shadow border p-5 login-form z-1">
 
+    <div class="container min-vh-100 d-flex align-items-center justify-content-center py-5 bg-login">
+        <div class="row w-100">
+            <div class="col-lg-6 col-xl-8 mx-auto">
+                <div class="card border-0 shadow-lg overflow-hidden ">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <!-- Left side decorative column with background -->
+                            <div class="col-md-5 d-none d-md-block bg-primary" style="min-height: 450px;">
+                                <div
+                                    class="d-flex flex-column justify-content-center align-items-center h-100 p-4 text-white">
+                                    <i class="bi bi-journal-text display-1 mb-4"></i>
+                                    <h2 class="fw-bold mb-2">Daily Journal</h2>
+                                    <p class="text-center mb-0">Document your thoughts, share your ideas, and track your
+                                        journey.</p>
+                                </div>
+                            </div>
 
-        <!-- Login Form -->
-        <div id="loginForm">
-            <h1>Login</h1>
-            <form action="/login" method="post" class="d-flex flex-column gap-2 pt-4">
-                <div class="form-group">
-                    <label for="username">Username or Email</label>
-                    <input type="text" name="username" class="form-control" id="username" autocomplete="on">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" class="form-control" id="password">
-                </div>
-                <div class="form-group mt-3">
-                    <button type="submit" name="button" class="btn btn-primary">Login</button>
-                    <button type="button" id="showSignup" class="btn btn-outline-secondary">Sign Up</button>
-                </div>
-            </form>
-            <% if (loginError){ %>
-                <p class="text-danger pt-3 text-right">Invalid credentials</p>
-                <% loginError=false } %>
-        </div>
+                            <!-- Right side with forms -->
+                            <div class="col-md-7">
+                                <div class="p-4 p-md-5">
+                                    <!-- Form Navigation Tabs -->
+                                    <ul class="nav nav-tabs mb-4" id="formTabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active fw-medium" id="login-tab"
+                                                data-bs-toggle="tab" data-bs-target="#loginForm" type="button"
+                                                role="tab" aria-controls="loginForm" aria-selected="true">
+                                                Login
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link fw-medium" id="signup-tab" data-bs-toggle="tab"
+                                                data-bs-target="#signupForm" type="button" role="tab"
+                                                aria-controls="signupForm" aria-selected="false">
+                                                Sign Up
+                                            </button>
+                                        </li>
+                                    </ul>
 
-        <!-- Sign Up Form (Initially Hidden) -->
-        <div id="signupForm" style="display: none;">
-            <h1>Sign Up</h1>
-            <form action="/signup" method="post" class="d-flex flex-column gap-2">
-                <div class="form-group">
-                    <label for="newUsername">Username</label>
-                    <input type="text" name="username" class="form-control" id="newUsername" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" class="form-control" id="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="newPassword">Password</label>
-                    <input type="password" name="password" class="form-control" id="newPassword" required>
-                </div>
-                <div class="form-group mt-3">
+                                    <!-- Tab Content -->
+                                    <div class="tab-content" id="formTabsContent">
+                                        <!-- Login Form Tab -->
+                                        <div class="tab-pane fade show active" id="loginForm" role="tabpanel"
+                                            aria-labelledby="login-tab">
+                                            <h3 class="fw-bold mb-4">Welcome Back</h3>
 
-                    <button type="submit" name="button" class="btn btn-success">Sign Up</button>
-                    <button id="showLogin" class="btn btn-outline-primary">Login</button>
+                                            <% if (loginError){ %>
+                                                <div class="alert alert-danger alert-dismissible fade show"
+                                                    role="alert">
+                                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                                    Invalid username or password. Please try again.
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <% loginError=false } %>
+
+                                                    <form action="/login" method="post">
+                                                        <div class="mb-3">
+                                                            <label for="username" class="form-label">Username or
+                                                                Email</label>
+                                                            <div class="input-group">
+                                                                <span class="input-group-text bg-light">
+                                                                    <i class="bi bi-person"></i>
+                                                                </span>
+                                                                <input type="text" name="username" class="form-control"
+                                                                    id="username"
+                                                                    placeholder="Enter your username or email"
+                                                                    autocomplete="username" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <div class="d-flex justify-content-between">
+                                                                <label for="password"
+                                                                    class="form-label">Password</label>
+                                                                <a href="#" class="text-decoration-none small">Forgot
+                                                                    password?</a>
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <span class="input-group-text bg-light">
+                                                                    <i class="bi bi-lock"></i>
+                                                                </span>
+                                                                <input type="password" name="password"
+                                                                    class="form-control" id="password"
+                                                                    placeholder="Enter your password"
+                                                                    autocomplete="current-password" required>
+                                                                <button
+                                                                    class="btn btn-outline-secondary toggle-password"
+                                                                    type="button">
+                                                                    <i class="bi bi-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3 form-check">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                id="rememberMe">
+                                                            <label class="form-check-label" for="rememberMe">Remember
+                                                                me</label>
+                                                        </div>
+
+                                                        <div class="d-grid gap-2">
+                                                            <button type="submit" class="btn btn-primary py-2">
+                                                                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                        </div>
+
+                                        <!-- Sign Up Form Tab -->
+                                        <div class="tab-pane fade" id="signupForm" role="tabpanel"
+                                            aria-labelledby="signup-tab">
+                                            <h3 class="fw-bold mb-4">Create Account</h3>
+
+                                            <form action="/signup" method="post">
+                                                <div class="mb-3">
+                                                    <label for="newUsername" class="form-label">Username</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text bg-light">
+                                                            <i class="bi bi-person-plus"></i>
+                                                        </span>
+                                                        <input type="text" name="username" class="form-control"
+                                                            id="newUsername" placeholder="Choose a username"
+                                                            autocomplete="username" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text bg-light">
+                                                            <i class="bi bi-envelope"></i>
+                                                        </span>
+                                                        <input type="email" name="email" class="form-control" id="email"
+                                                            placeholder="Enter your email" autocomplete="email"
+                                                            required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="newPassword" class="form-label">Password</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text bg-light">
+                                                            <i class="bi bi-shield-lock"></i>
+                                                        </span>
+                                                        <input type="password" name="password" class="form-control"
+                                                            id="newPassword" placeholder="Create a password"
+                                                            autocomplete="new-password" required>
+                                                        <button class="btn btn-outline-secondary toggle-password"
+                                                            type="button">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="form-text">Password must be at least 8 characters long.
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-grid gap-2">
+                                                    <button type="submit" class="btn btn-primary py-2">
+                                                        <i class="bi bi-person-check me-2"></i>Sign Up
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
-    <!-- Toggle Script -->
+    <!-- Add this script for password toggle and other interactions -->
     <script>
-        document.getElementById("showLogin").addEventListener("click", function () {
-            document.getElementById("loginForm").style.display = "block";
-            document.getElementById("signupForm").style.display = "none";
-            this.classList.add("active");
-            document.getElementById("showSignup").classList.remove("active");
-        });
+        // Bootstrap tab functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Bootstrap tabs with JavaScript
+            const triggerTabList = document.querySelectorAll('#formTabs button');
+            triggerTabList.forEach(triggerEl => {
+                const tabTrigger = new bootstrap.Tab(triggerEl);
 
-        document.getElementById("showSignup").addEventListener("click", function () {
-            document.getElementById("signupForm").style.display = "block";
-            document.getElementById("loginForm").style.display = "none";
-            this.classList.add("active");
-            document.getElementById("showLogin").classList.remove("active");
+                triggerEl.addEventListener('click', event => {
+                    event.preventDefault();
+                    tabTrigger.show();
+                });
+            });
+
+            // Password visibility toggle
+            const toggleButtons = document.querySelectorAll('.toggle-password');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.previousElementSibling;
+                    const icon = this.querySelector('i');
+
+                    // Toggle password visibility
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    }
+                });
+            });
         });
     </script>
-
 
     <%- include("partials/footerlogin") -%>
