@@ -1,65 +1,114 @@
 <%- include("partials/header", { username: username }) -%>
-    <div class="welcome">
 
-        <div class="">
-            <a href="/<%= username %>/compose">
-                <button class="btn plus py-1 px-4 shadow rounded-pill">Compose</button>
-            </a>
-        </div>
-        <h1 class="text-black font-bold font-weight-600 quote">'<%= startText %>'
-        </h1>
-
-    </div>
-
-
-
-
-    <div class="post-div">
-        <% posts.forEach(element=> { %>
-
-            <div class="post-card shadow border">
-                <div class="d-flex gap-2 flex-row-reverse pb-2">
-
-                    <button class="d-flex btn btn-danger rounded-pill"
-                        onclick="deletePost('<%= element.title %>')">Delete</button>
-                    <button class="btn btn-success rounded-pill"
-                        onclick="editPost('<%= element.title %>')">Edit</button>
-                </div>
-
-                <h1>
-                    <%= element.title %>
-                </h1>
-                <p>
-                    <%= element.content.substring(0,100)+" ..." %> <br />
-                        <a class="btn btn-secondary border mt-4" href="/<%= username %>/posts/<%= element.title %>">Read
-                            more</a>
-                </p>
+    <div class="container py-4">
+        <!-- Hero Section -->
+        <div class="row mb-5">
+            <div class="col-md-10 col-lg-8 mx-auto text-center">
+                <blockquote class="blockquote">
+                    <p class="display-6 fw-bold text-primary mb-4">'<%= startText %>'</p>
+                </blockquote>
+                <a href="/<%= username %>/compose"
+                    class="btn btn-success shadow-lg btn-lg px-4 shadow-sm rounded-pill my-2">
+                    <i class="bi bi-plus-circle me-2"></i>Compose New Post
+                </a>
             </div>
-            <% }); %>
-    </div>
+        </div>
 
+        <!-- Posts Section -->
+        <div class="row g-4">
+            <% if (posts.length===0) { %>
+                <div class="col-12 text-center">
+                    <div class="card border-0 shadow-sm p-5 w-max">
+                        <h3 class="text-muted">No posts yet</h3>
+                        <p>Create your first post to get started!</p>
+                    </div>
+                </div>
+                <% } %>
+
+                    <% posts.forEach(element=> { %>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 border-0 rounded-lg shadow-sm post-card">
+                                <!-- Random pastel background colors for card header -->
+                                <div class="card-header border-0 rounded-top-lg p-3"
+                                    style="background-color: <%= ['#f0f8ff', '#e6e6fa', '#f5f5dc', '#e0ffff', '#fffacd'][Math.floor(Math.random() * 5)] %>">
+                                    <h4 class="card-title fw-bold text-truncate mb-0">
+                                        <%= element.title %>
+                                    </h4>
+                                </div>
+
+                                <div class="card-body p-4">
+
+
+                                    <p class="card-text">
+                                        <%= element.content.substring(0, 100) + "..." %>
+                                    </p>
+
+                                    <div class="post-stats d-flex text-muted mt-3 mb-2">
+                                        <div class="me-3">
+                                            <i class="bi bi-calendar3 me-1"></i>
+                                            <small>
+                                                <%= new Date().toLocaleDateString() %>
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <i class="bi bi-clock me-1"></i>
+                                            <small>
+                                                <%= Math.ceil(element.content.length / 200) %> min read
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer bg-white border-0 p-4 pt-0">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a class="btn btn-primary rounded-pill px-4 read-more-btn"
+                                            href="/<%= username %>/posts/<%= element.title %>">
+                                            <i class="bi bi-book me-1"></i>Read more
+                                        </a>
+
+                                        <div class="dropdown">
+                                            <button class="btn btn-light rounded-circle py-1 px-2 action-btn"
+                                                type="button"
+                                                id="dropdownMenuButton<%= element.title.replace(/\s+/g, '') %>"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm"
+                                                aria-labelledby="dropdownMenuButton<%= element.title.replace(/\s+/g, '') %>">
+                                                <li>
+                                                    <button class="dropdown-item"
+                                                        onclick="editPost('<%= element.title %>')">
+                                                        <i class="bi bi-pencil-square me-2 text-success"></i>Edit post
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <button class="dropdown-item text-danger"
+                                                        onclick="deletePost('<%= element.title %>')">
+                                                        <i class="bi bi-trash me-2"></i>Delete post
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+        </div>
+    </div>
 
 
 
     <%- include("partials/footer") -%>
-        <script>
-            async function deletePost(title) {
-                if (confirm("Are you sure you want to delete this post?")) {
-                    const response = await fetch(`/delete/${title}`, {
-                        method: "DELETE"
-                    });
+        <%- include("partials/deleteModal") -%>
 
-                    if (response.ok) {
+            <script>
 
-                        window.location.reload();
-                    } else {
-                        alert("Failed to delete the post.");
-                    }
+
+                function editPost(title) {
+                    window.location.href = `/edit/${encodeURIComponent(title)}`;
                 }
-            }
-
-            function editPost(title) {
-                window.location.href = `/edit/${encodeURIComponent(title)}`;
-            }
-
-        </script>
+            </script>

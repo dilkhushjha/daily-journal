@@ -1,16 +1,68 @@
-<%- include("partials/header", { username: "khush" }) -%>
-    <h1>Compose</h1>
-    <form action="/<%= username %>/compose" method="post">
-        <div class="form-group">
-            <label for="postTitle">Title</label>
-            <input type="text" name="postTitle" class="form-control" id="postTitle" autocomplete="on">
+<%- include("partials/header") -%>
+
+    <div class="container-fluid py-5">
+        <div class="row justify-content-center">
+            <div class="col-xl-12">
+                <!-- Breadcrumb navigation -->
+                <nav aria-label="breadcrumb" class="d-flex mb-4">
+                    <ol class="breadcrumb bg-transparent m-0">
+                        <li class="breadcrumb-item">
+                            <a href="/" class="text-decoration-none">
+                                <i class="bi bi-house me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Compose Entry
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- Compose form -->
+                <div class="card border-0 shadow-sm mb-5">
+                    <div class="card-body p-4 p-lg-5">
+                        <h1 class="h2 mb-4">Compose New Journal Entry</h1>
+
+                        <form action="/:username/compose" method="post">
+                            <div class="mb-4">
+                                <label for="postTitle" class="form-label fw-medium">Title</label>
+                                <input type="text" name="postTitle" class="form-control form-control-lg" id="postTitle"
+                                    autocomplete="off" placeholder="Enter a title for your journal entry" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="postBody" class="form-label fw-medium">Entry Content</label>
+                                <textarea name="postBody" class="form-control" id="postBody" rows="12"
+                                    placeholder="Write your thoughts here..." required></textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a href="/" class="btn btn-outline-secondary rounded-pill px-4">
+                                    <i class="bi bi-x-circle me-2"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                    <i class="bi bi-journal-check me-2"></i>Publish Entry
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="postBody">Post</label>
-            <textarea name="postBody" class="form-control" id="postBody" rows="5"></textarea>
-        </div>
-        <div class="form-group">
-            <button type="submit" name="button" class="btn btn-primary mt-4">Publish</button>
-        </div>
-    </form>
+    </div>
+
+    <style>
+        /* Focus state for form controls */
+        .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        /* Textarea styling */
+        #postBody {
+            min-height: 300px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+    </style>
+
     <%- include("partials/footer") -%>

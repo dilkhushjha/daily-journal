@@ -1,46 +1,194 @@
-<%- include("partials/header", { username: "Khush" }) -%>
+<%- include("partials/header", { username: username }) -%>
 
-    <div class="edit-container">
-        <h1>Edit Post</h1>
-        <form id="editForm">
-            <div class="form-group">
-                <label for="postTitle">Title</label>
-                <input type="text" class="form-control" id="editTitle" value="<%= post.title %>" readonly>
+    <div class=" py-4">
+        <div class="row justify-content-center">
+            <div class="col-xl-12">
+                <div class="card border-0 shadow-lg mb-4">
+                    <div class="card-header bg-primary text-white p-4 border-0">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-pencil-square fs-4 me-3"></i>
+                            <h2 class="mb-0 fw-bold">Edit Post</h2>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <!-- Edit Form - Left Side -->
+                            <div class="col-md-6 border-end">
+                                <div class="p-4">
+                                    <form id="editForm">
+                                        <div class="mb-4">
+                                            <label for="editTitle" class="form-label fw-medium">Title</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    <i class="bi bi-type-h1"></i>
+                                                </span>
+                                                <input type="text" class="form-control bg-light" id="editTitle"
+                                                    value="<%= post.title %>" readonly>
+                                            </div>
+                                            <small class="text-muted">Post title cannot be changed</small>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="editContent" class="form-label fw-medium">Content</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light align-items-start pt-2">
+                                                    <i class="bi bi-file-text"></i>
+                                                </span>
+                                                <textarea class="form-control" id="editContent" rows="15"
+                                                    placeholder="Write your thoughts here..."><%= post.content %></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="alert alert-info d-flex align-items-center" role="alert">
+                                            <i class="bi bi-info-circle-fill me-2"></i>
+                                            <div>
+                                                Your changes will be saved immediately when you click Update.
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between mt-4">
+                                            <a href="/" class="btn btn-light px-4 py-2 rounded-pill">
+                                                <i class="bi bi-arrow-left me-2"></i>Cancel
+                                            </a>
+                                            <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill">
+                                                <i class="bi bi-check-lg me-2"></i>Update Post
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Preview - Right Side -->
+                            <div class="col-md-6">
+                                <div class="p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="bi bi-eye fs-4 me-2 text-primary"></i>
+                                        <h4 class="mb-0">Live Preview</h4>
+                                    </div>
+
+                                    <div class="preview-container bg-light p-4 rounded-3" style="min-height: 400px;">
+                                        <h3 id="previewTitle" class="fw-bold mb-4">
+                                            <%= post.title %>
+                                        </h3>
+                                        <div id="previewContent" class="preview-content">
+                                            <%= post.content %>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center text-muted mt-3">
+                                        <small><i class="bi bi-info-circle me-1"></i> The preview updates as you
+                                            type</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="postContent">Content</label>
-                <textarea class="form-control" id="editContent" rows="5"><%= post.content %></textarea>
-            </div>
-            <div class="form-group mt-4">
-                <button class="btn btn-primary " type="submit">Update</button>
-                <a class="btn btn-warning " href="/">Cancel</a>
-            </div>
-        </form>
+        </div>
     </div>
 
     <script>
-        document.getElementById("editForm").addEventListener("submit", async function (event) {
-            event.preventDefault();
 
-            const title = document.getElementById("editTitle").value;
-            const content = document.getElementById("editContent").value;
+        const username = '<%= username %>';
 
-            console.log(content, title);
+        document.addEventListener('DOMContentLoaded', function () {
+            const editForm = document.getElementById("editForm");
+            const editTitle = document.getElementById("editTitle");
+            const editContent = document.getElementById("editContent");
+            const previewTitle = document.getElementById("previewTitle");
+            const previewContent = document.getElementById("previewContent");
 
-            const response = await fetch(`/edit/${title}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ content })
-            })
+            // Initialize with current content
+            previewContent.innerHTML = formatContent(editContent.value);
 
-            if (response.ok) {
-                // alert("Post updated successfully!");
-                window.location.href = "/";
-            } else {
-                console.log(response)
-                alert("Failed to update the post.");
+            // Live preview functionality with formatting
+            editContent.addEventListener("input", function () {
+                previewContent.innerHTML = formatContent(this.value);
+            });
+
+            // Simple formatting function (convert line breaks to paragraphs)
+            function formatContent(text) {
+                if (!text) return '';
+
+                // Split by double line breaks for para graphs
+                const paragraphs = text.split(/\n\s*\n/);
+                return paragraphs
+                    .filter(p => p.trim() !== '')
+                    .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+                    .join('');
             }
+
+            // Form submission
+            editForm.addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                const title = editTitle.value;
+                const content = editContent.value;
+
+                // Show loading state
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Updating...';
+                submitButton.disabled = true;
+
+                try {
+                    const response = await fetch(`/edit/${title}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ content })
+                    });
+
+                    if (response.ok) {
+                        // Add success feedback
+                        submitButton.innerHTML = '<i class="bi bi-check-circle me-2"></i>Updated!';
+                        submitButton.classList.replace('btn-primary', 'btn-success');
+
+                        // Redirect after brief success message
+                        setTimeout(() => {
+                            window.location.href = `/${username}/home`;
+                        }, 1000);
+                    } else {
+                        throw new Error("Failed to update post");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+
+                    // Show error message
+                    const errorAlert = document.createElement('div');
+                    errorAlert.className = 'alert alert-danger mt-3';
+                    errorAlert.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>Failed to update the post. Please try again.';
+                    editForm.appendChild(errorAlert);
+
+                    // Remove error message after 5 seconds
+                    setTimeout(() => {
+                        errorAlert.remove();
+                    }, 5000);
+                }
+            });
         });
     </script>
+
+    <style>
+        /* Additional styles for the preview */
+        .preview-content {
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .preview-content p {
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 767.98px) {
+            .col-md-6.border-end {
+                border-right: none !important;
+                border-bottom: 1px solid #dee2e6;
+            }
+        }
+    </style>
 
     <%- include("partials/footer") -%>
