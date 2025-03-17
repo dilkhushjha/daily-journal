@@ -80,7 +80,7 @@ app.get("/", async (req, res) => {
 });
 
 // =========================
-// Authentication Routes
+// Authentication Routes 
 // =========================
 
 // Login Page

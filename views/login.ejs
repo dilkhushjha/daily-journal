@@ -1,24 +1,70 @@
 <%- include("partials/headerwithoutnavbar") -%>
     <div class="shadow border p-5 login-form z-1">
 
-        <h1>Login</h1>
-        <form action="/login" method="post" class="d-flex flex-column gap-2 pt-4">
-            <div class="form-group">
-                <label for="username">Username or Email</label>
-                <input type="text" name="username" class="form-control" id="username" autocomplete="on">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input name="password" class="form-control" id="password"></input>
-            </div>
-            <div class="form-group">
-                <button type="submit" name="button" class="btn btn-primary mt-3">Login</button>
-            </div>
-        </form>
-        <% if (loginError){ %>
-            <p class="text-danger pt-3 text-right">Invalid credentials</p>
-            <% loginError=false } %>
 
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h1>Login</h1>
+            <form action="/login" method="post" class="d-flex flex-column gap-2 pt-4">
+                <div class="form-group">
+                    <label for="username">Username or Email</label>
+                    <input type="text" name="username" class="form-control" id="username" autocomplete="on">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <div class="form-group mt-3">
+                    <button type="submit" name="button" class="btn btn-primary">Login</button>
+                    <button type="button" id="showSignup" class="btn btn-outline-secondary">Sign Up</button>
+                </div>
+            </form>
+            <% if (loginError){ %>
+                <p class="text-danger pt-3 text-right">Invalid credentials</p>
+                <% loginError=false } %>
+        </div>
+
+        <!-- Sign Up Form (Initially Hidden) -->
+        <div id="signupForm" style="display: none;">
+            <h1>Sign Up</h1>
+            <form action="/signup" method="post" class="d-flex flex-column gap-2">
+                <div class="form-group">
+                    <label for="newUsername">Username</label>
+                    <input type="text" name="username" class="form-control" id="newUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" class="form-control" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Password</label>
+                    <input type="password" name="password" class="form-control" id="newPassword" required>
+                </div>
+                <div class="form-group mt-3">
+
+                    <button type="submit" name="button" class="btn btn-success">Sign Up</button>
+                    <button id="showLogin" class="btn btn-outline-primary">Login</button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <!-- Toggle Script -->
+    <script>
+        document.getElementById("showLogin").addEventListener("click", function () {
+            document.getElementById("loginForm").style.display = "block";
+            document.getElementById("signupForm").style.display = "none";
+            this.classList.add("active");
+            document.getElementById("showSignup").classList.remove("active");
+        });
+
+        document.getElementById("showSignup").addEventListener("click", function () {
+            document.getElementById("signupForm").style.display = "block";
+            document.getElementById("loginForm").style.display = "none";
+            this.classList.add("active");
+            document.getElementById("showLogin").classList.remove("active");
+        });
+    </script>
+
 
     <%- include("partials/footerlogin") -%>
